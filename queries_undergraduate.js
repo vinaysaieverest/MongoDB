@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const { class12th, Undergraduate, Postgraduate } = require("./models");
 const { undergraduate } = require('./data');
+const { toUpper } = require('lodash');
 
 router.get('/',async (req,res)=> {
     console.log("hi"
@@ -35,7 +36,7 @@ router.get('/',async (req,res)=> {
 
 router.get('/:name', async (req,res)=>{
   try{
-    const name1 = req.params.name
+    const name1 = toUpper(req.params.name)
     console.log(name1)
     const results1 = await Undergraduate.aggregate([
       {
