@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const express = require("express");
 const { Course, Prerequisite } = require("./models");
-const { courseData,prerequisiteData} = require('./data');
+const { courseData, prerequisiteData } = require('./data');
 const app = express();
 
 mongoose.connect("mongodb://localhost/vinay", {
@@ -16,25 +16,31 @@ mongoose.connect("mongodb://localhost/vinay", {
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// const a = require("./queries_postgraduation");
-// const b = require("./queries_undergraduate");
-// const readCSVFile = require("./ReadCSVFile");
-// const { class12, undergraduate, postgraduate } = require('./read_CSV');
-
 async function insertCoursesAndPrerequisites() {
     try {
         // Insert courses and get their IDs
         const insertedCourses = await Course.insertMany(courseData);
-        const insertedPrere = await Prerequisite.insertMany(prerequisiteData)
-        const courseid = insertedCourses.map(course => course.id);
-        const courseName = insertedCourses.map(course => course.name)
-
         console.log('Inserted courses:', insertedCourses);
-        console.log('Insertd Pre_re',insertedPrere)
 
-        
+        // Map course names to their IDs
+        const courseMap = {};
+        insertedCourses.forEach(course => {
+            courseMap[course.name] = course._id;
+        });
 
-        // await Prerequisite.insertMany(preRequisitesData);
+        // Replace course names with their IDs in prerequisiteData
+        const updatedPrerequisiteData = prerequisiteData.map(prerequisite => {
+            const prerequisiteArray = Array.isArray(prerequisite.prerequisite) ? prerequisite.prerequisite : [prerequisite.prerequisite];
+            const updatedPrere = {
+                course: courseMap[prerequisite.course],
+                prerequisite: prerequisiteArray.map(name => courseMap[name])
+            };
+            return updatedPrere;
+        });
+
+        // Insert prerequisites
+        const insertedPrerequisites = await Prerequisite.insertMany(updatedPrerequisiteData);
+        console.log('Inserted prerequisites:', insertedPrerequisites);
     } catch (error) {
         console.error('Error inserting courses or prerequisites:', error);
     }
@@ -49,32 +55,6 @@ async function run() {
     }
 }
 
-async function run1() {
-    try {
-        // Additional logic can be added here
-    } catch (e) {
-        console.log(e);
-    }
-}
-
-async function run2() {
-    try {
-        await Course.deleteMany();
-        await Prerequisite.deleteMany();
-    } catch (e) {
-        console.log(e);
-    }
-}
-
-const queries = async () => {
-    try {
-        app.use("/api/postgraduation", a);
-        app.use("/api/undergraduation", b);
-    } catch (e) {
-        console.log(e);
-    }
-};
-
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
@@ -84,4 +64,4 @@ app.listen(PORT, () => {
 // run2();
 // run();
 // queries();
-insertCoursesAndPrerequisites()
+run();

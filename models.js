@@ -1,24 +1,29 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 
-const class12 = new mongoose.Schema({
-    id:Number,
-    name:String,
-    pre_re:String
-})
-const undergraduate = new mongoose.Schema({
-    id:Number,
-    name:String,
-    pre_re:[Number]
-})
-const postgraduate = new mongoose.Schema({
-    id:Number,
-    name:String,
-    pre_re:[Number]
+const CourseSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+    },
+    course_level: {
+        type: String,
+        required: true,
+    },
+ 
+});
 
-})
+const PrerequisitesSchema = new mongoose.Schema({
+    course: {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: "Course"
+    },
+    prerequisite: [{
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: "Course"
+    }],
+});
 
-const class12th = mongoose.model("class12",class12)
-const Undergraduate = mongoose.model("undergraduate",undergraduate)
-const Postgraduate = mongoose.model("postgraduate",postgraduate)
-module.exports = {class12th,Undergraduate,Postgraduate};
+const Course = mongoose.model("Course", CourseSchema);
+const Prerequisite = mongoose.model("Prerequisite", PrerequisitesSchema);
 
+module.exports = { Course, Prerequisite };

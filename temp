@@ -1,0 +1,96 @@
+To reference another document's ID in MongoDB, you need to use the `ObjectId` type in your schema. Here's how you can modify your schema to achieve this:
+
+```
+const mongoose = require("mongoose")
+
+const class12 = new mongoose.Schema({
+  id: Number,
+  name: String,
+  pre_re: String
+})
+
+const undergraduate = new mongoose.Schema({
+  id: Number,
+  name: String,
+  pre_re: [{ type: mongoose.Schema.Types.ObjectId, ref: 'class12' }]
+})
+
+const postgraduate = new mongoose.Schema({
+  id: Number,
+  name: String,
+  pre_re: [{ type: mongoose.Schema.Types.ObjectId, ref: 'undergraduate' }]
+})
+
+const class12th = mongoose.model("class12", class12)
+const Undergraduate = mongoose.model("undergraduate", undergraduate)
+const Postgraduate = mongoose.model("postgraduate", postgraduate)
+
+module.exports = { class12th, Undergraduate, Postgraduate }
+```
+
+In the modified schema, the `pre_re` field in the `undergraduate` and `postgraduate` schemas is an array of `ObjectId` references to the `class12` model.
+
+When inserting data, you need to pass the `ObjectId` of the referenced document instead of the `id` value. Here's how you can modify your data insertion code:
+
+```
+const class12Data = [
+  { id: 1, name: "MPC", pre_re: "10th" },
+  { id: 2, name: "BiPC", pre_re: "10th" },
+  { id: 3, name: "CEC", pre_re: "10th" },
+  { id: 4, name: "HEC", pre_re: "10th" },
+  { id: 5, name: "MEC", pre_re: "10th" },
+  { id: 6, name: "MBiPC", pre_re: "10th" },
+  { id: 7, name: "ITI", pre_re: "10th" }
+]
+
+const undergraduateData = [
+  {
+    id: 1,
+    name: "BTECH",
+    pre_re: [class12th.findById(1)._id, class12th.findById(2)._id, class12th.findById(6)._id]
+  },
+  {
+    id: 2,
+    name: "DEGREE",
+    pre_re: [
+      class12th.findById(1)._id,
+      class12th.findById(2)._id,
+      class12th.findById(3)._id,
+      class12th.findById(4)._id,
+      class12th.findById(5)._id,
+      class12th.findById(6)._id,
+      class12th.findById(7)._id
+    ]
+  },
+  // ... other data
+]
+
+const postgraduateData = [
+  {
+    id: 1,
+    name: "MTECH",
+    pre_re: [class12th.findById(1)._id, class12th.findById(2)._id]
+  },
+  {
+    id: 2,
+    name: "MBA",
+    pre_re: [
+      class12th.findById(1)._id,
+      class12th.findById(2)._id,
+      class12th.findById(3)._id,
+      class12th.findById(4)._id,
+      class12th.findById(5)._id,
+      class12th.findById(6)._id,
+      class12th.findById(7)._id
+    ]
+  },
+  // ... other data
+]
+
+// Insert data into the database
+class12th.insertMany(class12Data)
+Undergraduate.insertMany(undergraduateData)
+Postgraduate.insertMany(postgraduateData)
+```
+
+In this modified data insertion code, we're using the `findById` method of the `class12th` model to get the `ObjectId` of the referenced documents and passing them to the `pre_re` field of the `undergraduate` and `postgraduate` data.
