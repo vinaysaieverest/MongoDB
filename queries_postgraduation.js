@@ -1,19 +1,19 @@
 
 const express = require('express');
 const router = express.Router();
-const { class12th, Undergraduate, Postgraduate } = require("./models");
+const { class12th, Undergraduate, Postgraduate, Course } = require("./models");
 const { toUpper } = require('lodash');
 
 router.get('/',async (req,res)=> {
     console.log("hi"
     )
   try {
-    const results = await Postgraduate.aggregate([
+    const results = await Course.aggregate([
       {
         $lookup: {
-          from: "undergraduates",
+          from: "prep",
           localField: "pre_re",
-          foreignField: "id",
+          foreignField: "_id",
           as: "Pre-re"
         }
       },
@@ -63,4 +63,4 @@ router.get('/:name',async (req,res)=> {
     console.error(e);
   }
 })
-module.exports = router
+// module.exports = router

@@ -1,0 +1,26 @@
+name,course_level,pre_level,pre_name
+10th,Secondary School,null,null
+MPC,12th,null,10th
+BiPC,12th,null,10th
+CEC,12th,null,10th
+BTECH,UnderGraduation,12th,MPC
+BTECH,UnderGraduation,12th,Bipc
+MBBS,UnderGraduation,12th,Bipc
+CA,UnderGraduation,12th,CEC
+BPHARM,UnderGraduation,12th,BiPC
+DEGREE,UnderGraduation,12th,MPC
+DEGREE,UnderGraduation,12th,CEC
+DEGREE,UnderGraduation,12th,BiPC
+LLB,UnderGraduation,12th,CEC
+MTECH,PostGraduation,UnderGraduation,BTECH
+MASTER_LLB,PostGraduation,UnderGraduation,LLB
+MASTER_MBBS,PostGraduation,UnderGraduation,MBBS
+MBA,PostGraduation,UnderGraduation,BTECH
+MBA,PostGraduation,UnderGraduation,MBBS
+MBA,PostGraduation,UnderGraduation,BPHARM
+MCA,PostGraduation,UnderGraduation,BTECH
+MCA,PostGraduation,UnderGraduation,DEGREE
+MASTER_SCIENCE,PostGraduation,UnderGraduation,BTECH
+MASTER_SCIENCE,PostGraduation,UnderGraduation,DEGREE
+MASTER_PHARM,PostGraduation,UnderGraduation,BPHARM
+MASTER_COMMERCE,PostGraduation,UnderGraduation,CA
