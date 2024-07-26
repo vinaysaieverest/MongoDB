@@ -1,11 +1,11 @@
 name,course_level,pre_level,pre_name
-10th,Secondary School,null,null
-MPC,12th,null,10th
-BiPC,12th,null,10th
-CEC,12th,null,10th
+10th,Secondary School,Schooling,Must complete 9th standard
+MPC,12th,10th,10th
+BiPC,12th,10th,10th
+CEC,12th,10th,10th
 BTECH,UnderGraduation,12th,MPC
-BTECH,UnderGraduation,12th,Bipc
-MBBS,UnderGraduation,12th,Bipc
+BTECH,UnderGraduation,12th,BiPC
+MBBS,UnderGraduation,12th,BiPC
 CA,UnderGraduation,12th,CEC
 BPHARM,UnderGraduation,12th,BiPC
 DEGREE,UnderGraduation,12th,MPC

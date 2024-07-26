@@ -6,32 +6,86 @@ const { models } = require('mongoose');
 console.log(Course)
 console.log(prer)
 
-router.get('/',async (req,res)=> {
-    console.log("hi");
-  try{
-
-   const results  = await Course.aggregate([
-    {
-        $match: {
-          pre_id: { $exists: true, $ne: [] }  // Ensure pre_id exists and is not an empty array
+router.get('/', async (req, res) => {
+  try {
+      const results = await Course.aggregate([
+          {
+              $lookup: {
+                  from: "prers",
+                  localField: "pre_id",
+                  foreignField: "_id",
+                  as: "Prerequiste"
+              }
+          },
+          {
+            $project: {
+              
+              name: 1,
+              course_level: 1,
+              Prerequiste: {
+                name: 1,
+                course_level: 1
+              }
+            }
         }
-      },
-      {
-        $lookup: {
-          from: "prer",                    // The target collection to join
-          localField: "pre_id",            // Field from the Courses collection (array of ObjectId)
-          foreignField: "_id",             // Field from the prer collection (_id)
-          as: "Pre-re"                     // Output array field name
-        }
-      }
-    ])
-    //console.log(results)
-    res.json(results)
+          
+      ]);
 
+      res.json(results);
+      console.log(results)
   } catch (e) {
-    console.log("error")
-    console.error(e);
-    res.send("hi")
+      console.error(e);
+      res.send("Error is Occured");
   }
+});
+router.get('/:name',async(req,res)=>{
+    try {
+        const name1 = toUpper(req.params.name)
+        const results = await Course.aggregate([
+            {
+                $match:{name:name1}
+              },
+            {
+                $lookup: {
+                    from: "prers",
+                    localField: "pre_id",
+                    foreignField: "_id",
+                    as: "Prerequiste"
+                }
+            },
+            {
+              $project: {
+                
+                name: "$name",
+                course_level: "$course_level",
+                Prerequiste: {
+                  name: "$prers.name",
+                  course_level: "$prers.course_level"
+                }
+              }
+          }
+         
+            
+        ]);
+  
+        res.json(results);
+        console.log(results)
+    } catch (e) {
+        console.error(e);
+        res.send("Error is Occured");
+    }
+    
 })
 module.exports = router
+
+
+// {
+//     $project: {
+//       _id: 0,
+//       postgraduate: "$name",
+//       prerequisites: "$Pre-re.name"
+//     }
+//   },
+//   {
+//     $match:{postgraduate:name1}
+//   }

@@ -46,7 +46,7 @@ const CourseSchema = new mongoose.Schema({
   },
   pre_id: [{
     type: mongoose.SchemaTypes.ObjectId,
-    ref: "Course"
+    ref: "prer"
   }]
 });
 

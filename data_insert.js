@@ -21,20 +21,23 @@
 //     }
 //     module.exports = {dataResult,data1Result}
 // }
+const { readFile } = require('fs');
 const { prer } = require('./models');
 const readCSVFile = require('./ReadCSVFile');
 
 const data = './data.csv';
 const data1 = './data1.csv';
+const dataResult =  readCSVFile(data);
+const data1Result = readCSVFile(data1)
 
-async function importData() {
-  try {
-    const dataResult = await readCSVFile(data);
-    const data1Result = await readCSVFile(data1);
-    await prer.insertMany(data1Result);
-  } catch (error) {
-    console.error('Error importing data:', error);
-  }
-}
+// async function importData() {
+//   try {
+//     const dataResult = await readCSVFile(data);
+//     const data1Result = await readCSVFile(data1);
+//     //await prer.insertMany(data1Result);
+//   } catch (error) {
+//     console.error('Error importing data:', error);
+//   }
+// }
 
-module.exports = { importData };
+module.exports = { dataResult , data1Result };
